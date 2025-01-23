@@ -51,7 +51,12 @@ public class BookingServiceImpl implements BookingService {
         flightsDTO.setAvailable_seats((flightsDTO.getAvailable_seats())-1);
         System.out.println("seats avilable : "+flightsDTO.getAvailable_seats());
         restTemplate.put(flightServUrl+ "/" + reqflight, flightsDTO);
+        //set the flight data for the booking DTO
+        newBooking.setFlights(flightsDTO);
 
+        Long userId = newBooking.getUsers().getId();
+        UsersDTO usersDTO = restTemplate.getForObject(usrServUrl + "/" + userId, UsersDTO.class);
+        newBooking.setUsers(usersDTO);
         return restTemplate.postForObject(dataStoreUrl , newBooking, BookingDTO.class);
 
     }
