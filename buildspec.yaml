@@ -8,7 +8,7 @@ phases:
       - echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin
       - AWS_REGION=us-east-1
       - AWS_ACCOUNT_ID=537124967315
-      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 537124967315.dkr.ecr.us-east-1.amazonaws.com/tafbookingservice
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 537124967315.dkr.ecr.us-east-1.amazonaws.com/booking-repo
       - echo "Granting execution permission to gradle wrapper"
       - chmod +x ./gradlew
       - ./gradlew clean
@@ -19,7 +19,7 @@ phases:
       - echo Building the Spring Boot application...
       - ./gradlew build
       - echo Building the Docker image...
-      - IMAGE_REPO_NAME=tafbookingservice
+      - IMAGE_REPO_NAME=booking-repo
       - IMAGE_TAG=latest
       - echo img-repo-name $IMAGE_REPO_NAME
       - echo img-tag $IMAGE_TAG
@@ -35,11 +35,11 @@ phases:
       - echo Pushing the Docker image to Amazon ECR...
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
       - echo Writing image definitions file...
-      - REPOSITORY_URI=537124967315.dkr.ecr.us-east-1.amazonaws.com/tafbookingservice
-      - printf '[{"name":"tafbookingservice-service","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+      - REPOSITORY_URI=537124967315.dkr.ecr.us-east-1.amazonaws.com/booking-repo
+      - printf '[{"name":"bookingservice-service","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
       - echo Writing image definitions file...
       - # add your container name
-      - DOCKER_CONTAINER_NAME=tafbookingservice
+      - DOCKER_CONTAINER_NAME=booking-repo
       - printf '[{"name":"%s","imageUri":"%s"}]' $DOCKER_CONTAINER_NAME $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
       - echo Build process completed successfully.
 

@@ -16,6 +16,7 @@ public class BookingController {
     private final BookingServiceImpl bookingServiceImpl;
 
     //Create a new booking.
+    @CrossOrigin(origins = "*")
     @PostMapping("/bookings")
     public BookingDTO AddBooking(@RequestBody BookingDTO newBooking){
         return bookingServiceImpl.AddBooking(newBooking);
